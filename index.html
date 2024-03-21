@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	 crossorigin="anonymous">
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/roslibjs/1.1.0/roslib.min.js">
+
+	</script>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js">
+	</script>
+  <script src="https://unpkg.com/vue-router@4"></script>
+  
+</head>
+
+<body>
+  <div id="app" class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">ROS Task/Action</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <router-link to="/" class="nav-link">Home</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/actions" class="nav-link">Action</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/create" class="nav-link">Create</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link to="/help" class="nav-link">Help</router-link>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="jumbotron">
+      <div class="row">
+        <div class="col-md-6">
+          <h2 class="display-4">Hello from TIAGo!</h2>
+          <p class="lead">Welcome to this web interface for the TIAGo Robot.</p>
+        </div>
+
+        <div class="col-md-6">
+          <div class="container">
+            <div class="row">
+              <div class ="col">
+                <h4>Connection Status</h4>
+                <label for="ws_address">Please Enter Websocket Server Address</label>
+              </div>
+            </div>
+            <div class="row">
+
+              <div class="col-md-5">
+                <input type="text" id="ws_address" v-model="ws_address" class="form-control" />
+              </div>
+              <div class="col-md-4">
+                <button :disabled="loading" @click="connect" v-if="!connected" class="btn btn-success ">Connect</button>
+                <button :disabled="loading" @click="disconnect" v-if="connected" class="btn btn-danger ">Disconnect</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <br>
+        
+
+  <router-view></router-view>
+
+	</div>
+
+	<script type="text/javascript" src="main.js">
+
+	</script>
+</body>
+
+</html>
