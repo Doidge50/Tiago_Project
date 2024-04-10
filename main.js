@@ -53,27 +53,41 @@ const Actions = {
         <div class="card mr-2 ml-1">
           <div class="card-body text-center">
             <h4 class="card-title">Movement</h4>
+            <br><br>
             <div class="container">
               <div class="row justify-content-center mb-2">
-
-                <div class="col-4">
-                  <button @click="forward" :disabled="loading || !connected" class="btn btn-secondary btn-block mb-2 mx-1" style ="width: 100px; height: 100px;">Go forward</button>
+                <div class="col justify-content-center mx-1">
+                  <button @click="forwardLeft" :disabled="loading || !connected" class="btn btn-secondary btn-block" style ="width: 100px; height: 100px;">Forward Left</button>
+                </div>
+                <div class="col justify-content-center mx-1">
+                  <button @click="forward" :disabled="loading || !connected" class="btn btn-secondary btn-block mb-2" style ="width: 100px; height: 100px;">Go Forward</button>
+                </div>
+                <div class="col justify-content-center mx-1">
+                  <button @click="forwardRight" :disabled="loading || !connected" class="btn btn-secondary btn-block" style ="width: 100px; height: 100px;">Forward Right</button>
                 </div>
               </div>
+
+
               <div class="row justify-content-center mb-2">
                 <div class="col justify-content-center mx-1">
-                  <button @click="left" :disabled="loading || !connected" class="btn btn-secondary btn-block" style ="width: 100px; height: 100px;">Turn left</button>
+                  <button @click="left" :disabled="loading || !connected" class="btn btn-secondary btn-block" style ="width: 100px; height: 100px;">Turn Left</button>
                 </div>
                 <div class="col justify-content-center mx-1">
                   <button @click="stop" :disabled="loading || !connected" class="btn btn-secondary btn-block mb-2" style ="width: 100px; height: 100px;">Stop</button>
                 </div>
                 <div class="col justify-content-center mx-1">
-                  <button @click="right" :disabled="loading || !connected" class="btn btn-secondary btn-block" style ="width: 100px; height: 100px;">Turn right</button>
+                  <button @click="right" :disabled="loading || !connected" class="btn btn-secondary btn-block" style ="width: 100px; height: 100px;">Turn Right</button>
                 </div>
               </div>
               <div class="row justify-content-center mb-2">
-                <div class="col-4">
-                  <button @click="backward" :disabled="loading || !connected" class="btn btn-secondary btn-block mx-1" style ="width: 100px; height: 100px;">Go backward</button>
+                <div class="col justify-content-center mx-1">
+                  <button @click="backwardLeft" :disabled="loading || !connected" class="btn btn-secondary btn-block" style ="width: 100px; height: 100px;">Backward Left</button>
+                </div>
+                <div class="col justify-content-center mx-1">
+                  <button @click="backward" :disabled="loading || !connected" class="btn btn-secondary btn-block mb-2" style ="width: 100px; height: 100px;">Go Backward</button>
+                </div>
+                <div class="col justify-content-center mx-1">
+                  <button @click="backwardRight" :disabled="loading || !connected" class="btn btn-secondary btn-block" style ="width: 100px; height: 100px;">Backward Right</button>
                 </div>
               </div>
             </div>
@@ -346,8 +360,26 @@ const Actions = {
     
           forward: function(){
             this.message = new ROSLIB.Message({
-                linear: { x : 1, y : 0, z : 0 },
+                linear: { x : 5, y : 0, z : 0 },
                 angular: { x: 0, y : 0, z : 0 }
+            })
+            this.twist()
+            this.topic.publish(this.message)
+          },
+
+          forwardRight: function(){
+            this.message = new ROSLIB.Message({
+                linear: { x : 5, y : 0, z : 0 },
+                angular: { x: 0, y : 0, z : -1.6}
+            })
+            this.twist()
+            this.topic.publish(this.message)
+          },
+
+          forwardLeft: function(){
+            this.message = new ROSLIB.Message({
+                linear: { x : 5, y : 0, z : 0 },
+                angular: { x: 0, y : 0, z : 1.6 }
             })
             this.twist()
             this.topic.publish(this.message)
@@ -355,8 +387,26 @@ const Actions = {
     
           backward: function(){
             this.message = new ROSLIB.Message({
-                linear: { x : -1, y : 0, z : 0 },
+                linear: { x : -5, y : 0, z : 0 },
                 angular: { x: 0, y : 0, z : 0 }
+            })
+            this.twist()
+            this.topic.publish(this.message)
+          },
+
+          backwardRight: function(){
+            this.message = new ROSLIB.Message({
+                linear: { x : -5, y : 0, z : 0 },
+                angular: { x: 0, y : 0, z : -1.6 }
+            })
+            this.twist()
+            this.topic.publish(this.message)
+          },
+
+          backwardLeft: function(){
+            this.message = new ROSLIB.Message({
+                linear: { x : -5, y : 0, z : 0 },
+                angular: { x: 0, y : 0, z : 1.6 }
             })
             this.twist()
             this.topic.publish(this.message)
@@ -365,7 +415,7 @@ const Actions = {
           right: function(){
             this.message = new ROSLIB.Message({
                 linear: { x : 0, y : 0, z : 0 },
-                angular: { x: 0, y : 0, z : -0.5 }
+                angular: { x: 0, y : 0, z : -1.6 }
             })
             this.twist()
             this.topic.publish(this.message)
@@ -374,7 +424,7 @@ const Actions = {
           left: function(){
             this.message = new ROSLIB.Message({
                 linear: { x : 0, y : 0, z : 0 },
-                angular: { x: 0, y : 0, z : 0.5 }
+                angular: { x: 0, y : 0, z : 1.6 }
             })
             this.twist()
             this.topic.publish(this.message)
@@ -398,12 +448,11 @@ const Joints = {
       topic: null,
       message: null,
       armControlActionClient: null,
-      jointStateListener: null,
-      jointName: 'head_2_joint', // Specify the joint you're interested in
-      jointPosition: 0, // Placeholder for the joint position
+
     };
 },
-inject: ['connected', 'ros', 'ws_address', 'logs', 'loading', 'urdfModel'],
+
+inject: ['connected', 'ros', 'ws_address', 'logs', 'loading', 'urdfModel', 'jointStateListener', 'jointPositions'],
 
 template:
 `
@@ -414,39 +463,36 @@ template:
                       <div class="card-body">
                           <h5 class="card-title text-center">Arm</h5>
                           <div class="slider-container">
-                          <br>
-                              <label for="armJoint1">Shoulder Horizontal</label>
-                              <input type="range" class="custom-range" id="armJoint1" min="0.07" max="2.68" step="0.01" @input="arm_1_move($event.target.value)">
-                              <span id="sliderValue">0</span> radians
-                              <label class="slider-label">Shoulder Vertical</label>
-                              <input type="range" class="custom-range">
-                              <label class="slider-label">Elbow Twist</label>
-                              <input type="range" class="custom-range">
-                              <label class="slider-label">Elbow Bend</label>
-                              <input type="range" class="custom-range">
-                              <label class="slider-label">Wrist Twist</label>
-                              <input type="range" class="custom-range">
-                              <label class="slider-label">Wrist Bend</label>
-                              <input type="range" class="custom-range">
-                              <label class="slider-label">Hand Twist</label>
-                              <input type="range" class="custom-range">
+                              <label for="armJoint1">Shoulder Horizontal (arm_1_joint)</label>
+                              <input type="text" class="form-control" id="armJoint1" readonly :value="armJoint1Position">
+                              <label for="armJoint2">Shoulder Vertical (arm_2_joint)</label>
+                              <input type="text" class="form-control" id="armJoint2" readonly :value="armJoint2Position">
+                              <label for="armJoint3">Elbow Twist (arm_3_joint)</label>
+                              <input type="text" class="form-control" id="armJoint3" readonly :value="armJoint3Position">
+                              <label for="armJoint4">Elbow Bend (arm_4_joint)</label>
+                              <input type="text" class="form-control" id="armJoint4" readonly :value="armJoint4Position">
+                              <label for="armJoint5">Wrist Twist (arm_5_joint)</label>
+                              <input type="text" class="form-control" id="armJoint5" readonly :value="armJoint5Position">
+                              <label for="armJoint6">Wrist Twist (arm_6_joint)</label>
+                              <input type="text" class="form-control" id="armJoint6" readonly :value="armJoint6Position">
+                              <label for="armJoint7">Hand Twist (arm_7_joint)</label>
+                              <input type="text" class="form-control" id="armJoint7" readonly :value="armJoint7Position">
                               <br>
                           </div>
                       </div>
                   </div>
               </div>
               <div class="col-md-6">
-                  <div class="card mb-2">
+                  <div class="card mb-3">
                       <div class="card-body">
                           <h5 class="card-title text-center">Head & Torso</h5>
                           <div class="slider-container">
-                              <label class="slider-label">Head Twist</label>
-                              <input type="range" class="custom-range">
-                              <label class="slider-label">Head Bend</label>
-                              <input type="range" class="custom-range">
-                              <label class="slider-label">Torso Height</label>
-                              <input type="range" class="custom-range">
-                              <!-- Add more sliders as needed -->
+                              <label for="headJoint1">Head Twist (head_1_joint)</label>
+                              <input type="text" class="form-control" id="headJoint1" readonly :value="headJoint1Position">
+                              <label for="headJoint2">Head Bend (head_2_joint)</label>
+                              <input type="text" class="form-control" id="headJoint2" readonly :value="headJoint2Position">
+                              <label for="torsoJoint">Torso Height (torso_lift_joint)</label>
+                              <input type="text" class="form-control" id="torsoJoint" readonly :value="torsoPosition">
                           </div>
                       </div>
                   </div>
@@ -454,23 +500,69 @@ template:
                       <div class="card-body">
                           <h5 class="card-title text-center">Hand</h5>
                           <div class="slider-container">
-                              <label class="slider-label">Index Finger</label>
-                              <input type="range" class="custom-range">
-                              <label class="slider-label">Other Fingers</label>
-                              <input type="range" class="custom-range">
-                              <label class="slider-label">Thumb</label>
-                              <input type="range" class="custom-range">
-                              <!-- Add more sliders as needed -->
+                              <label for="handIndex">Index Finger (hand_index_joint)</label>
+                              <input type="text" class="form-control" id="handIndex" readonly :value="handIndexPosition">
+                              <label for="handOther">Index Finger (hand_mrl_joint)</label>
+                              <input type="text" class="form-control" id="handOther" readonly :value="handOtherPosition">
+                              <label for="handThumb">Index Finger (hand_thumb_joint)</label>
+                              <input type="text" class="form-control" id="handThumb" readonly :value="handThumbPosition">
                           </div>
                       </div>
                   </div>
               </div>
           </div>
-          <div>
-            <p>Position of {{ jointName }}: {{ jointPosition.toFixed(2) }}</p>
-          </div>
+         
       </div>
   `,
+
+  computed: {
+    // Arm
+    armJoint1Position() {
+      return this.jointPositions['arm_1_joint']?.toFixed(2) || 0;
+    },
+    armJoint2Position() {
+      return this.jointPositions['arm_2_joint']?.toFixed(2) || 0;
+    },
+    armJoint3Position() {
+      return this.jointPositions['arm_3_joint']?.toFixed(2) || 0;
+    },
+    armJoint4Position() {
+      return this.jointPositions['arm_4_joint']?.toFixed(2) || 0;
+    },
+    armJoint5Position() {
+      return this.jointPositions['arm_5_joint']?.toFixed(2) || 0;
+    },
+    armJoint6Position() {
+      return this.jointPositions['arm_6_joint']?.toFixed(2) || 0;
+    },
+    armJoint7Position() {
+      return this.jointPositions['arm_7_joint']?.toFixed(2) || 0;
+    },
+
+    // Head & Torso
+    headJoint1Position() {
+      return this.jointPositions['head_1_joint']?.toFixed(2) || 0;
+    },
+    headJoint2Position() {
+      return this.jointPositions['head_2_joint']?.toFixed(2) || 0;
+    },
+    torsoPosition() {
+      return this.jointPositions['torso_lift_joint']?.toFixed(2) || 0;
+    },
+
+    // Hand
+
+    handIndexPosition() {
+      return this.jointPositions['hand_index_joint']?.toFixed(2) || 0;
+    },
+    handOtherPosition() {
+      return this.jointPositions['hand_mrl_joint']?.toFixed(2) || 0;
+    },
+    handThumbPosition() {
+      return this.jointPositions['hand_thumb_joint']?.toFixed(2) || 0;
+    },
+  },
+  
   methods: {
     
     initializeArmControlActionClient: function() {
@@ -527,28 +619,14 @@ template:
 
   },
 
-  mounted() {
-    this.jointStateListener = new ROSLIB.Topic({
-      ros: this.ros,
-      name: '/joint_states',
-      messageType: 'sensor_msgs/JointState'
-    });
-  
-    this.jointStateListener.subscribe((message) => {
-      // Look for the index of the joint of interest
-      const index = message.name.findIndex((name) => name === this.jointName);
-      if (index !== -1) {
-        // Update the component's data property with the current position
-        this.jointPosition = message.position[index];
-      }
-    });
-  },
+  // mounted() {
 
-  beforeDestroy() {
-    if (this.jointStateListener) {
-      this.jointStateListener.unsubscribe();
-    }
-  },
+
+  // beforeDestroy() {
+  //   if (this.jointStateListener) {
+  //     this.jointStateListener.unsubscribe();
+  //   }
+  // },
 
   // mounted() {
   //   // This will ensure your ROS connection is initialized as soon as the component is mounted.
@@ -632,6 +710,22 @@ const app = Vue.createApp({
         topic: null,
         message: null,
         urdfModel: null,
+        jointStateListener: null,
+        jointPositions: {
+          arm_1_joint: 0,
+          arm_2_joint: 0,
+          arm_3_joint: 0,
+          arm_4_joint: 0,
+          arm_5_joint: 0,
+          arm_6_joint: 0,
+          arm_7_joint: 0,
+          head_1_joint: 0,
+          head_2_joint: 0,
+          torso_lift_joint: 0,
+          hand_index_joint: 0,
+          hand_mrl_joint: 0,
+          hand_thumb_joint: 0
+        },
       };
     },
     provide() {
@@ -643,7 +737,9 @@ const app = Vue.createApp({
             loading: Vue.computed(() => this.loading),
             topic: Vue.computed(() => this.topic),
             message: Vue.computed(() => this.message),
-            urdfModel: Vue.computed(() => this.urdfModel)
+            urdfModel: Vue.computed(() => this.urdfModel),
+            jointStateListener: Vue.computed(() => this.jointStateListener),
+            jointPositions: Vue.computed(() => this.jointPositions)
         };
     },
     methods: {
@@ -658,7 +754,8 @@ const app = Vue.createApp({
             this.connected = true
             this.loading = false
             console.log('Connected to websocket server.');
-            this.getUrdfModel(); 
+            this.getUrdfModel();
+            this.startJointListener(); 
         });
         this.ros.on('error', (error) => {
             this.logs.unshift((new Date()).toTimeString() + ' - Error: $(error)')
@@ -703,8 +800,34 @@ const app = Vue.createApp({
           console.log("Abaga")
           this.urdfModel = urdfModel;
         });
-      }
+      },
 
+      startJointListener: function() {
+        this.jointStateListener = new ROSLIB.Topic({
+          ros: this.ros,
+          name: '/joint_states',
+          messageType: 'sensor_msgs/JointState'
+        });
+    
+        this.jointStateListener.subscribe((message) => {
+          message.name.forEach((jointName, index) => {
+            // This line ensures Vue reacts to changes in jointPositions object
+            // by creating a new object with updated joint positions.
+            // It's particularly useful for ensuring reactivity in Vue 3.
+            this.jointPositions = { 
+              ...this.jointPositions, 
+              [jointName]: message.position[index] 
+            };
+          });
+        });
+      },
+    },
+
+
+    beforeDestroy() {
+      if (this.jointStateListener) {
+        this.jointStateListener.unsubscribe();
+      }
     },
 
   });
