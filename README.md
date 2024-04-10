@@ -4,8 +4,7 @@ Final year project - Web interface for TIAGo robot - Action/Task Variation
 Author - Adam Doidge K21056614
 Supervisor - Gerard Canal
 
-
-Dependencies:
+# Dependencies:
 
 Apptainer Intsallation - https://apptainer.org/docs/admin/main/installation.html
 Tiago Apptainer Container - https://nextcloud.nms.kcl.ac.uk/s/BZtWJtiyP57r8YN/download
