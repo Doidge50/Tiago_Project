@@ -11,9 +11,9 @@ Tiago Apptainer Container - https://nextcloud.nms.kcl.ac.uk/s/BZtWJtiyP57r8YN/do
 
 
 
-## ROS Preparation:
+# ROS Preparation:
 
-# Start Container:
+## Start Container:
 
 1. In a linux terminal window navigate to the folder containing tiago_noetic_opensource.sif file obtained from the Container link above.
 
@@ -23,7 +23,7 @@ Tiago Apptainer Container - https://nextcloud.nms.kcl.ac.uk/s/BZtWJtiyP57r8YN/do
 
 4. Run the command "roscore"
 
-# Run Rosbridge Server:
+## Run Rosbridge Server:
 
 To be able to connect TIAGo to the web interface you must start a rosbridge websocket server.
 
@@ -32,7 +32,7 @@ To be able to connect TIAGo to the web interface you must start a rosbridge webs
 2. Run the command "roslaunch rosbridge_server rosbridge_websocket.launch"
 
 
-# Start TIAGo Gazebo Simulation:
+## Start TIAGo Gazebo Simulation:
 
 If working with a virtual TIAGo follow these instructions to start a gazebo simulation.
 
@@ -43,7 +43,7 @@ If working with a virtual TIAGo follow these instructions to start a gazebo simu
 - Note the world can be edited to any valid world, see tiago tutorials for some other examples : http://wiki.ros.org/Robots/TIAGo/Tutorials
 
 
-# Obtain Websocket url:
+## Obtain Websocket url:
 
 To link the web interface and robot you will need to obtain you rosbridge websocket url.
 
@@ -54,7 +54,7 @@ To link the web interface and robot you will need to obtain you rosbridge websoc
 3. The port of the url will by default be 9090, a custom port can be configured by running "roslaunch rosbridge_server rosbridge_websocket.launch port:=<CUSTOM_PORT>" where <CUSTOM_PORT> is the port you want to run the server on. You can then replace the 9090 in the first two steps with that custom port.
 
 
-# Locally running the Web Interface.
+## Locally running the Web Interface.
 
 If you wish to run the web interface locally follow these steps.
 
